@@ -59,7 +59,19 @@ async fn main() {
             get(handlers::blockchain::node::get_all_nodes)
                 .post(handlers::blockchain::node::register_node),
         )
-        .route("/chain", get(handlers::blockchain::chain::get_blockchain))
+        // query params will be used to filter the chain
+        .route(
+            "/chain",
+            get(handlers::blockchain::chain::get_chain)
+                .post(handlers::blockchain::chain::add_transaction),
+        )
+        /*
+        .route("/peer/inventory", get(handlers::blockchain::peer::get_inventory))
+        .route("/peer/getblocks", post(handlers::blockchain::peer::get_blocks))
+        .route("/peer/getdata", post(handlers::blockchain::peer::get_data))
+        .route("/peer/sync", post(handlers::blockchain::peer::sync_node))
+        .route("/peer/status", get(handlers::blockchain::peer::get_node_status))
+             */
         .with_state(nodes)
         .route_layer(TraceLayer::new_for_http());
 
